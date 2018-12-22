@@ -3,6 +3,7 @@
 using namespace std;
 int m=0;
 
+//Definicija cvora
 struct Node{
         int i;
         Node* parent;
@@ -48,6 +49,8 @@ Node* newNode(int t){
     Node* x = new Node(t);
     return x;
 }
+
+//Definicja steka
 class Stack{
     int top;
     Node* niz[MAX_SIZE_OF_STACK];
@@ -88,39 +91,39 @@ Node* Stack::pop(){
 bool Stack::isEmpty(){return !top;}
 int Stack::dub(){return nizDub[top];}
 
+//Definicija stabla
 class Stablo{
         int maxDub;
         Node* koren;
 public:
-        Stablo(int k);//setujemo m
-        void ispis();
-        void addNode(Node* newOne);
-        int sirinaStabla();
-        bool postoji(){return m;}
-        ~Stablo();
+    Stablo(int k){ koren=nullptr;maxDub=0;}
+    Node* getKoren(){return koren;}
+    void addNode(Node* newOne);
+    int sirinaStabla();
+    bool postoji(){return m;}
+    friend ostream& operator <<(ostream& it, const Stablo& t);
+    void operator+=(Node* newOne){addNode(newOne);}
+    ~Stablo();
 };
-Stablo::Stablo(int k){
-  //  m=k;
-    koren=nullptr;
-    maxDub=0;
-}
-void Stablo::ispis(){
-    cout<<"Stablo u preorder poretku: ";
+//ispis
+ostream& operator<<(ostream& it, Stablo &t){
+    it<<"Stablo u preorder poretku: ";
     Stack s;
-    s.push(koren);
+    s.push(t.getKoren());
     Node* sled;
     while(!s.isEmpty()){
         sled=s.pop();
         while(sled){
-            cout<<sled->i<<" ";
+            it<<sled->i<<" ";
             for(int i=m-1;i>0;i--)
                 if(sled->next[i])
                     s.push(sled->next[i]);
             sled=sled->next[0];
         }
     }
-    cout<<endl;
+    return it<<endl;
 }
+//funkcija dodavanja cvora - preklopljen operator +=
 void Stablo::addNode(Node* newOne){
     if(!koren){koren=newOne;return;}
     int trenutnaDub=0;
@@ -154,6 +157,7 @@ void Stablo::addNode(Node* newOne){
     maxDub++;
     return;
 }
+//sirina
 int Stablo::sirinaStabla(){
     if(maxDub==1)return 1;
     int br1=0,br2=0,trenutnaDub=0;
@@ -176,6 +180,7 @@ int Stablo::sirinaStabla(){
     }
     return max(br1,br2);
 }
+//destruktor
 Stablo::~Stablo(){
     Stack s;
     s.push(koren);
@@ -196,13 +201,12 @@ Stablo::~Stablo(){
     m=0;
 }
 
-int main()
-{
-    int b=0;Node* cvor;
-    Stablo* stablo=new Stablo(0);
+int main(){
+    int b;Node* cvor;
+    Stablo *stablo=new Stablo(0);
 
     while(true){
-        cout<<"Unesite redni broj operacije koju zelite da primenite:"<<endl;
+    cout<<"Unesite redni broj operacije koju zelite da primenite:"<<endl;
     cout<<"0. Kreiranje m-arnog stabla"<<endl;
     cout<<"1. Dodavanje cvora"<<endl;
     cout<<"2. Ispis stabla"<<endl;
@@ -210,23 +214,24 @@ int main()
     cout<<"4. Odredjivanje sirine stabla"<<endl;
     cout<<"5. Izlaz"<<endl;
     int k;cin>>k;
-    switch(k) {
+
+    switch(k){
         case 0:
             cout<<"Unesite red stabla m: ";cin>>m;
             stablo=new Stablo(m);
             break;
         case 1:
             if(stablo->postoji()){
-            cout<<"Unesite broj koji zelite da dodate: ";cin>>b;
+            cout<<"Unesite broj koji zelite da dodate: ";
+            cin>>b;
             cvor=newNode(b);
-            stablo->addNode(cvor);
+            *stablo+=cvor;
             }
             else cout<<"ERROR: Prvo morate kreirati stablo"<<endl;
             break;
         case 2:
-            if(stablo->postoji()){stablo->ispis();cout<<endl;}
+            if(stablo->postoji())cout<<*stablo<<endl;
             else cout<<"ERROR: Prvo morate kreirati stablo."<<endl;
-            //stablo->ispisR(koren);cout<<endl;cout<<endl;
             break;
         case 3:
             if(stablo->postoji()){delete stablo;cout<<"Stablo je obrisano."<<endl;}
@@ -239,7 +244,11 @@ int main()
         case 5:
             exit(1);
             break;
-    }
-    }
-    return 0;
+        default:
+        cout<<"Takva operacija ne postoji. Pokusajte ponovo"<<endl;
+            break;
+        }
+       //switch
+    }//while(true)
+
 }
