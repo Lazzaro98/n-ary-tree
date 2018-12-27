@@ -209,7 +209,7 @@ Stablo* napraviStabloIgre(Node* cvor){
     t->setKoren(cvor);
     Stack s;
     s.push(t->getKoren());
-    Node* sled;
+    Node* sled;//ne poziva konstruktor jer je pokazivac, pa cu posle rucno postaviti pointere na nullptr
     cvor->igrac=igrac;
     cout<<"Koren stabla:"<<t->getKoren();
     while(!s.isEmpty()){
@@ -323,12 +323,11 @@ int main()
                 if(t->postoji())nadjiPobedu(t,'b');
                 else cout<<"Prvo napravite stablo pa pozovite ovu operaciju."<<endl;
             break;
-
             case 3:
                 exit(1);
                 break;
             case 121:
-                cout<<endl<<"Broj cvorova:"<<brCv;
+                cout<<"Broj cvorova:"<<brCv;
             break;
             default:
                 cout<<"Takva operacija ne postoji, pokusajte ponovo."<<endl;
@@ -337,4 +336,3 @@ int main()
     }
     return 0;
 }
-
