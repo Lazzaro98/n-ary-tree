@@ -293,6 +293,7 @@ int main()
     cout<<" 0. Kreiraj (novo) stablo igre."<<endl;
     cout<<" 1. Pronadji pobedu za crvenog."<<endl;
     cout<<" 2. Pronadji pobedu za plavog."<<endl;
+    cout<<"Unesite redni broj operacije koju zelite da pozovete:";
     Stablo *t;
     int op;cin>>op;
     char c;
