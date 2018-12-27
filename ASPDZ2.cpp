@@ -1,9 +1,8 @@
 #include <iostream>
 #define MAX_SIZE_OF_STACK 100000
 #include<time.h>
-#include<string.h>
 using namespace std;
-int m=5;
+int m=0;
 int pow(int n,int k){
     int p=1;
     while(k--)p*=n;
@@ -15,7 +14,6 @@ char matx[6][5]=   {'\\',' ',' ',' ','/',
                     ' ','/',' ','\\',' ',
                     '/',' ',' ',' ','\\',
                     ' ',' ',' ',' ',' '};
-
 
 void setujTablu(char (&mat)[6][5]){
     for(int j=0;j<5;j++){
@@ -85,9 +83,9 @@ struct Node{
 
             parent=t.parent;
             next=new Node*[m];
-            for(int i=0;i<m;i++)
+            for(int i=0;i<5;i++)
                 next[i]=t.next[i];
-            cout<<"Kopirajuci konstruktor pozvan"<<endl;
+            //cout<<"Kopirajuci konstruktor pozvan"<<endl;
         }
         void premesti(Node& t){
             stanje=t.stanje;
@@ -98,7 +96,7 @@ struct Node{
                 mat[i][j]=t.mat[i][j];
 
             t.next=nullptr;
-            cout<<"Premestajuci konstruktor pozvan"<<endl;
+            //cout<<"Premestajuci konstruktor pozvan"<<endl;
         }
         void brisi(){delete[]next;}
         Node(const Node& t){
@@ -117,6 +115,7 @@ struct Node{
             return *this;
         }
         friend ostream& operator << (ostream& ot, Node* x){
+        ot<<endl;
         for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
                 if(i==0 || i==6)ot<<"-";
@@ -125,6 +124,9 @@ struct Node{
                 }
             if(i!=6)ot<<endl;
             }
+        cout<<endl<<" ";
+        for(int i=0;i<5;i++)cout<<x->mat[5][i];
+        cout<<endl;
         return ot;
         }
 
@@ -190,272 +192,143 @@ public:
     bool postoji(){return m;}
     friend ostream& operator <<(ostream& it, const Stablo& t);
     void operator+=(Node* newOne){addNode(newOne);}
-    void setKoren(Node* cvor){koren=cvor;}// sta bese ovo
+    void setKoren(Node* cvor){koren=cvor;}
     ~Stablo();
-};
-/*int ktr=0;
+};  ///odavde
+
+
 Stablo* napraviStabloIgre(Node* cvor){
     Stablo *t = new Stablo(5);
-    cvor->igrac='r';
+    //random prvi igrac:
+    char igraci[2]={'r','b'};
+    srand(time(NULL));
+    int igr=rand()%2;
+    char igrac=igraci[(igr+1)%2];
+    cout<<endl<<"Prvi igrac: "<<igraci[igr]<<endl;
     t->setKoren(cvor);
-    bool gameOver=false;
-    char igrac=cvor->igrac;
-    int klp=0;
-    //while(!gameOver){
-    //int trenutnaDub=0,maxDub=slobPolja(cvor->mat);
-    //Node** nizCvorova= new Node*[2*pow(5,maxDub)];
-        //gameOver=true;
-        Stack s;
-        s.push(t->getKoren(),0);
-        Node* sled;
-        while(!s.isEmpty()){
-            //trenutnaDub=s.dub();
-            sled=s.pop();
-            while(sled){
-                Node* noviCvor;
-                if(!imaPotomke(sled) && sled->stanje=='0' && !fullMatrix(sled->mat)){
-                    if(sled->igrac=='r')igrac='b';
-                    else {igrac='r';klp++;}
-                    gameOver=false;
-                    for(int j=0;j<5;j++){
-                         noviCvor=new Node(sled->mat,'0');
-                        int k=sled->mat[5][j]-'0';
-                        if(k){
-                            int br=noviCvor->mat[5][j]-'1';
-                            noviCvor->mat[5][j]=br+'0';
-                            noviCvor->mat[k-1][j]=igrac;
-                            sled->next[j]=noviCvor;
-                            ktr++;
-
+    Stack s;
+    s.push(t->getKoren());
+    Node* sled;
+    cvor->igrac=igrac;
+    cout<<"Koren stabla:"<<t->getKoren();
+    while(!s.isEmpty()){
+        sled=s.pop();
+        while(sled){
+            Node* noviCvor;
+            if(sled->stanje=='0' && !fullMatrix(sled->mat)){
+                if(sled->igrac=='r')igrac='b';
+                else igrac='r';
+                for(int j=0;j<5;j++){
+                    noviCvor=new Node(sled->mat,'0');
+                    int k=sled->mat[5][j]-'0';
+                    if(k){
+                        int br=noviCvor->mat[5][j]-'1';
+                        noviCvor->mat[5][j]=br+'0';
+                        noviCvor->mat[k-1][j]=igrac;
                         noviCvor->parent=sled;
                         noviCvor->stanje=proveriPobednika(noviCvor->mat);
                         noviCvor->igrac=igrac;
-                        cout<<"Igrac: "<<igrac<<" Stanje cvora:"<<noviCvor->stanje<<endl<<noviCvor;
-                       // sled->next[j]=noviCvor;
-                        }
-                        else{
-                    noviCvor= new Node(matx,'X');
-                    noviCvor->parent=sled;
-                    noviCvor->igrac=igrac;
-                    sled->next[j]=noviCvor;
-                    cout<<noviCvor<<endl;
-                }
-
+                        sled->next[j]=noviCvor;
 
                     }
-                   // if(!trenutnaDub){nizCvorova[0]=sled;cout<<sled;}
-                   /* else{
-                    int b=pow(5,trenutnaDub);
-                    cout<<"B je: "<<b;
-                    while(nizCvorova[b])b++;
-                    nizCvorova[b]=sled;
-                }*/
-         //       }
-
-               // cout<<"--------------------------------------------------";
-              //  Sleep(1000);
-        /*        for(int i=4;i>0;i--)
-                    if(sled->next[i])
-                        s.push(sled->next[i]);
-                sled=sled->next[0];*/
-               // trenutnaDub++;
-
-                /*for(int i=0;i<5;i++)
-                    cout<<sled->mat[5][i];*/
-
-        //    }
-
-      //  }
-       // int b=0;
-       // cout<<"niz:"<<endl<<endl<<"-----------------"<<endl<<endl;
-      //  while(nizCvorova[b])cout<<nizCvorova[b++]<<"      ";
-   /*     cout<<"hahahahaahhahaahahaha";
-        //sada jos da ispises:
-    int b=1;
-    int z=5;
-    int zb=5;
-    //int lvl=0;//level
-    if(!nizCvorova[0])return;
-    //for(int h=0;h<maxDub-lvl+1;h++)cout<<" ";
-    cout<<nizCvorova[0]<<endl;
-    //for(int h=0;h<maxDub-lvl+1;h++)cout<<" ";
-    while(nizCvorova[b]){
-    cout<<nizCvorova[b];
-//cout<<b;
-    if(b==(zb)){
-        z*=m;
-        zb+=z;
-        cout<<endl;
-        //for(int h=0;h<maxDub-lvl;h++)cout<<" ";
-        //lvl++;
-        }
-        b++;
-    }
-
-   // }
-   cout<<klp;
-   return t;
-}
-
-void nadjiPobedu(Stablo* t,char igrac){
-            Stack s;
-            s.push(t->getKoren(),0);
-            Node* sled;
-            Node* pob;
-            while(!s.isEmpty()){
-            //trenutnaDub=s.dub();
-
-            sled=s.pop();
-
-           while(sled){
-                pob=new Node(matx,'0');
-                if(sled->stanje==igrac){pob=sled;goto nasao;}
-                //cout<<sled->stanje<<endl;
-
-
-                for(int i=4;i>0;i--)
-                    if(sled->next[i])
-                        s.push(sled->next[i]);
-                sled=sled->next[0];
+                }
             }
-
-}
-nasao:
-if(pob->stanje=='0'){cout<<igrac<<" ne moze nikada pobediti.";return;}
-            cout<<"Resenje:"<<endl;
-            Node* pom=pob;
-            while(pom){
-                cout<<pom->stanje<<endl;
-                cout<<pom;
-                pom=pom->parent;
-            }
-}*/
-
-
-
-Stablo* napraviStabloIgre(Node* cvor){
-	Stablo *t = new Stablo(5);
-	//random prvi igrac:
-	char igraci[2]={'r','b'};
-	srand(time(NULL));
-	unsigned short igr=rand()%2;
-	char igrac=igraci[igr];
-
-	t->setKoren(cvor);
-	Stack s;
-	s.push(t->getKoren(),0);
-	Node* sled;
-	while(!s.isEmpty()){
-		sled=s.pop();
-		while(sled){
-			Node* noviCvor;
-			if(!imaPotomke(sled) && sled->stanje=='0' && !fullMatrix(sled->mat)){
-				if(sled->igrac=='r')igrac='b';
-				else igrac='r';
-				for(int j=0;j<5;j++){
-					noviCvor=new Node(sled->mat,'0');
-					int k=sled->mat[5][j]-'0';
-					if(k){
-						int br=noviCvor->mat[5][j]-'1';
-                        noviCvor->mat[5][j]=br+'0';
-						noviCvor->mat[k-1][j]=igrac;
-						noviCvor->parent=sled;
-						noviCvor->stanje=proveriPobednika(noviCvor->mat);
-						noviCvor->igrac=igrac;
-						sled->next[j]=noviCvor;
-						//cout<<noviCvor;
-					}
-				}
-
-			}
-			for(int i=4;i>0;i--)
+            for(int i=4;i>0;i--)
                 if(sled->next[i])
                     s.push(sled->next[i]);
             sled=sled->next[0];
-
-
-		}
-
-
-	}
-	return t;
+        }
+    }
+    return t;
 }
 
 void nadjiPobedu(Stablo *t,char igrac){
-	Stack s;
-	s.push(t->getKoren());
-	Node* sled;
-	Node* pobednik;
-	while(!s.isEmpty()){
-		sled=s.pop();
-		while(sled){
-			pobednik=new Node(matx,'0');
-			if(sled->stanje==igrac){
-				pobednik=sled;
-				goto nasao;
-			}
-			for(int i=4;i>0;i--)
-				if(sled->next[i])
-					s.push(sled->next[i]);
-			sled=sled->next[0];
-		}
-	}
-	nasao:
-	if(pobednik->stanje=='0'){
-		cout<<igrac<<" ne moze nikada da pobedi."<<endl;
-		return;
-	}
-	cout<<"Resenje:"<<endl;
-	Node* pom=pobednik;
-	Stack st;
-	while(pom){
-		st.push(pom);
-		pom=pom->parent;
-		}
-
-	while(!st.isEmpty()){
-		cout<<st.pop();
-	}
+    Stack s;
+    s.push(t->getKoren());
+    Node* sled;
+    Node* pobednik;
+    while(!s.isEmpty()){
+        sled=s.pop();
+        while(sled){
+            pobednik=new Node(matx,'0');
+            if(sled->stanje==igrac){
+                pobednik=sled;
+                goto nasao;
+            }
+            for(int i=4;i>0;i--)
+                if(sled->next[i])
+                    s.push(sled->next[i]);
+            sled=sled->next[0];
+        }
+    }
+    nasao:
+    if(pobednik->stanje=='0'){
+        cout<<igrac<<" ne moze nikada da pobedi."<<endl;
+        return;
+    }
+    cout<<"Pobeda "<<igrac<<":"<<endl;
+    Node* pom=pobednik;
+    Stack st;
+    while(pom){
+        st.push(pom);
+        pom=pom->parent;
+        }
+    int b=0;
+    while(!st.isEmpty()){
+        cout<<endl<<"Izgled table nakon "<<b++<<". runde:"<<endl;
+        cout<<st.pop()<<endl;
+    }
 }
 int main()
 {
      char mat[6][5]={' ',' ',' ',' ',' ',
                     ' ',' ',' ',' ',' ',
-                    'b','r','b','r','b',
-                    'b','r','b','b','r',
-                    'r','b','r','b','r',
+                    'r','b','b','r','r',
+                    'b','r','r','b','b',
+                    'r','b','b','r','r',
                     'x','x','x','x','x'};
-    Node cvor(mat,0);
-    cout<<"Unesite redni broj operacije koju zelite da primenite: "<<endl;
-    cout<<" 0. Kreiraj stablo igre."<<endl;
+    Node cvor(mat,'0');
+    while(true){
+    cout<<endl<<"Unesite redni broj operacije koju zelite da primenite: "<<endl;
+    cout<<" 0. Kreiraj (novo) stablo igre."<<endl;
     cout<<" 1. Pronadji pobedu za crvenog."<<endl;
     cout<<" 2. Pronadji pobedu za plavog."<<endl;
     Stablo *t;
     int op;cin>>op;
+    char c;
     switch(op){
             case 0:
-                cout<<"Unesite tablu igre: "<<endl;
+               cout<<"Unesite tablu igre: "<<endl;
+               for(int i=0;i<5;i++)
+                    for(int j=0;j<5;j++)
+                        cin>>mat[i][j];
                 for(int i=0;i<5;i++)
                     for(int j=0;j<5;j++)
-                        cin.getline(mat[i][j],1);
+                        if(mat[i][j]=='.')mat[i][j]=' ';
                 setujTablu(mat);
-
-                for(int i=0;i<5;i++)
+               for(int i=0;i<6;i++)
                     for(int j=0;j<5;j++)
                         cvor.mat[i][j]=mat[i][j];
-
-                cout<<"Pravi se stablo...";
+                cout<<endl<<"Pravi se stablo...";
                 t=napraviStabloIgre(&cvor);
-                cout<<"Stablo napravljeno.";
+                cout<<endl<<"Stablo je napravljeno."<<endl;
             break;
             case 1:
-                nadjiPobedu(t,'r');
+                if(t->postoji())nadjiPobedu(t,'r');
+                else cout<<"Prvo napravite stablo pa pozovite ovu operaciju."<<endl;
             break;
             case 2:
-                nadjiPobedu(t,'b');
+                if(t->postoji())nadjiPobedu(t,'b');
+                else cout<<"Prvo napravite stablo pa pozovite ovu operaciju."<<endl;
             break;
-            }
- //cout<<proveriPobednika(mat);
-    //Node cvor2(cvor);  return 0;
-}
 
+            case 3:
+                exit(1);
+                break;
+            default:
+                cout<<"Takva operacija ne postoji, pokusajte ponovo."<<endl;
+                break;
+    }
+    }
+    return 0;
+}
