@@ -2,7 +2,7 @@
 #define MAX_SIZE_OF_STACK 100000
 #include<time.h>
 using namespace std;
-int m=0;
+int m=0,brCv=0;
 int pow(int n,int k){
     int p=1;
     while(k--)p*=n;
@@ -198,6 +198,7 @@ public:
 
 
 Stablo* napraviStabloIgre(Node* cvor){
+    brCv=0;
     Stablo *t = new Stablo(5);
     //random prvi igrac:
     char igraci[2]={'r','b'};
@@ -214,10 +215,11 @@ Stablo* napraviStabloIgre(Node* cvor){
     while(!s.isEmpty()){
         sled=s.pop();
         while(sled){
-            Node* noviCvor;
+            Node* noviCvor;brCv++;
             if(sled->stanje=='0' && !fullMatrix(sled->mat)){
                 if(sled->igrac=='r')igrac='b';
                 else igrac='r';
+                for(int j=0;j<5;j++)sled->next[j]=nullptr;
                 for(int j=0;j<5;j++){
                     noviCvor=new Node(sled->mat,'0');
                     int k=sled->mat[5][j]-'0';
@@ -229,7 +231,6 @@ Stablo* napraviStabloIgre(Node* cvor){
                         noviCvor->stanje=proveriPobednika(noviCvor->mat);
                         noviCvor->igrac=igrac;
                         sled->next[j]=noviCvor;
-
                     }
                 }
             }
@@ -326,6 +327,9 @@ int main()
             case 3:
                 exit(1);
                 break;
+            case 121:
+                cout<<endl<<"Broj cvorova:"<<brCv;
+            break;
             default:
                 cout<<"Takva operacija ne postoji, pokusajte ponovo."<<endl;
                 break;
@@ -333,3 +337,4 @@ int main()
     }
     return 0;
 }
+
