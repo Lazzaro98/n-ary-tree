@@ -107,7 +107,7 @@ struct Node{
         void brisi(){delete[]next;}
         Node(const Node& t){
             //kopiraj(t);
-            cout<<"Kopirajuci pozvan;";
+           // cout<<"Kopirajuci pozvan;";
         }
         Node(Node&& t){
             premesti(t);
@@ -130,9 +130,9 @@ struct Node{
                 }
             if(i!=6)ot<<endl;
             }
-        cout<<endl<<" ";
-        for(int i=0;i<5;i++)cout<<x->mat[5][i];
-        cout<<endl;
+       // cout<<endl<<" ";
+        //for(int i=0;i<5;i++)cout<<x->mat[5][i];
+        //cout<<endl;
         return ot;
         }
 
@@ -285,6 +285,7 @@ void nadjiPobedu(Stablo *t,char igrac){
         cout<<endl<<"Izgled table nakon "<<b++<<". runde:"<<endl;
         cout<<st.pop()<<endl;
     }
+    cout<<"Pobedio je "<<igrac<<endl;
 }
 int main()
 {
