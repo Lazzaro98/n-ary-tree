@@ -2,19 +2,25 @@
 #define MAX_SIZE_OF_STACK 100000
 #include<time.h>
 using namespace std;
+     char mat[6][5]={' ',' ',' ',' ',' ',
+                    ' ',' ',' ',' ',' ',
+                    'r','b','b','r','r',
+                    'b','r','r','b','b',
+                    'r','b','b','r','r',
+                    '2','2','2','2','2'};//primer matrice
+
+    char matx[6][5]=   {'\\',' ',' ',' ','/',
+                    ' ','\\',' ','/',' ',
+                    ' ',' ','\\',' ',' ',
+                    ' ','/',' ','\\',' ',
+                    '/',' ',' ',' ','\\',
+                    ' ',' ',' ',' ',' '};// X matrica
 int m=0,brCv=0;
 int pow(int n,int k){
     int p=1;
     while(k--)p*=n;
     return p;
 }
-char matx[6][5]=   {'\\',' ',' ',' ','/',
-                    ' ','\\',' ','/',' ',
-                    ' ',' ','\\',' ',' ',
-                    ' ','/',' ','\\',' ',
-                    '/',' ',' ',' ','\\',
-                    ' ',' ',' ',' ',' '};
-
 void setujTablu(char (&mat)[6][5]){
     for(int j=0;j<5;j++){
         int br=0;
@@ -282,12 +288,6 @@ void nadjiPobedu(Stablo *t,char igrac){
 }
 int main()
 {
-     char mat[6][5]={' ',' ',' ',' ',' ',
-                    ' ',' ',' ',' ',' ',
-                    'r','b','b','r','r',
-                    'b','r','r','b','b',
-                    'r','b','b','r','r',
-                    'x','x','x','x','x'};
     Node cvor(mat,'0');
     while(true){
     cout<<endl<<"Unesite redni broj operacije koju zelite da primenite: "<<endl;
@@ -295,32 +295,28 @@ int main()
     cout<<" 1. Pronadji pobedu za crvenog."<<endl;
     cout<<" 2. Pronadji pobedu za plavog."<<endl;
     cout<<"Unesite redni broj operacije koju zelite da pozovete:";
-    Stablo *t;
+    Stablo *stablo;
     int op;cin>>op;
-    char c;
     switch(op){
             case 0:
-               cout<<"Unesite tablu igre: "<<endl;
+               cout<<endl<<"Unesite tablu igre(r-crveni igrac, b-plavi igrac, . - prazn0 polje): "<<endl;
                for(int i=0;i<5;i++)
                     for(int j=0;j<5;j++)
-                        cin>>mat[i][j];
+                        cin>>cvor.mat[i][j];
                 for(int i=0;i<5;i++)
                     for(int j=0;j<5;j++)
-                        if(mat[i][j]=='.')mat[i][j]=' ';
-                setujTablu(mat);
-               for(int i=0;i<6;i++)
-                    for(int j=0;j<5;j++)
-                        cvor.mat[i][j]=mat[i][j];
+                        if(cvor.mat[i][j]=='.')cvor.mat[i][j]=' ';//unosim ih kao tackice jer cin ne prepoznaje razmak
+                setujTablu(cvor.mat);
                 cout<<endl<<"Pravi se stablo...";
-                t=napraviStabloIgre(&cvor);
+                stablo=napraviStabloIgre(&cvor);
                 cout<<endl<<"Stablo je napravljeno."<<endl;
             break;
             case 1:
-                if(t->postoji())nadjiPobedu(t,'r');
+                if(stablo->postoji())nadjiPobedu(stablo,'r');
                 else cout<<"Prvo napravite stablo pa pozovite ovu operaciju."<<endl;
             break;
             case 2:
-                if(t->postoji())nadjiPobedu(t,'b');
+                if(stablo->postoji())nadjiPobedu(stablo,'b');
                 else cout<<"Prvo napravite stablo pa pozovite ovu operaciju."<<endl;
             break;
             case 3:
