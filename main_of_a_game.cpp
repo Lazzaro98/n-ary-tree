@@ -1,3 +1,7 @@
+/*
+    coded by LazzaRo
+    main of a game
+*/
 #include <iostream>
 using namespace std;
 int main()
