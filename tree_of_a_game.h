@@ -1,3 +1,6 @@
+/*
+        coded by LazzaRo
+*/
 #include <iostream>
 #include "stack_of_a_game.h"
 #include "node_of_a_game.h"
