@@ -1,3 +1,6 @@
+/*
+     coded by LazzaRo
+*/
 #include <iostream>
 #define MAX_SIZE_OF_STACK 100000
 #include<time.h>
