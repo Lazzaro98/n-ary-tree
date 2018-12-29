@@ -1,3 +1,6 @@
+/*
+     coded by LazzaRo
+*/
 #include <iostream>
 using namespace std;
      char mat[6][5]={' ',' ',' ',' ',' ',
