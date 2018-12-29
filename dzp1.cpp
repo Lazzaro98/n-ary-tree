@@ -1,3 +1,7 @@
+/*
+	coded by LazzaRo
+*/
+
 #include <iostream>
 #define MAX_SIZE_OF_STACK 1000
 #include<math.h>
